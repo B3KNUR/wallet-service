@@ -1,0 +1,8 @@
+wallet:
+  default-currency: KZT
+  max-transfer-limit: 1000000
+  allowed-currencies:
+    - KZT
+    - USD
+    - EUR
+  commission-fee: 0.01

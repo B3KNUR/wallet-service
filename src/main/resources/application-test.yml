@@ -1,0 +1,6 @@
+wallet:
+  default-currency: USD
+  max-transfer-limit: 5000
+  allowed-currencies:
+    - USD
+  commission-fee: 0.0
