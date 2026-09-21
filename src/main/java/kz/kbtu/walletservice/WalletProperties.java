@@ -14,6 +14,6 @@ public record WalletProperties(
         @NotBlank String defaultCurrency,
         @Min(1) Long maxTransferLimit,
         @NotEmpty List<String> allowedCurrencies,
-        Double commissionFee
-) {
-}
+        Double commissionFee,
+        Boolean commissionEnabled
+) {}

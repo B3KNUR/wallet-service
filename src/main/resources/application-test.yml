@@ -4,3 +4,4 @@ wallet:
   allowed-currencies:
     - USD
   commission-fee: 0.0
+  commission-enabled: false

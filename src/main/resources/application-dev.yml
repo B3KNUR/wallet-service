@@ -6,3 +6,4 @@ wallet:
     - USD
     - EUR
   commission-fee: 0.01
+  commission-enabled: true
