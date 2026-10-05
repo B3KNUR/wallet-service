@@ -1,28 +1,79 @@
 package kz.kbtu.walletservice.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
+import kz.kbtu.walletservice.dto.request.AmountRequest;
+import kz.kbtu.walletservice.dto.request.CreateWalletRequest;
+import kz.kbtu.walletservice.dto.request.UpdateStatusRequest;
+import kz.kbtu.walletservice.dto.response.WalletResponse;
+import kz.kbtu.walletservice.mapper.WalletMapper;
+import kz.kbtu.walletservice.model.Wallet;
 import kz.kbtu.walletservice.service.WalletService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Map;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/wallet")
+@RequestMapping("/api/v1/wallets")
 public class WalletController {
     private final WalletService walletService;
+    private final WalletMapper walletMapper;
 
-    public WalletController(WalletService walletService) {
+    public WalletController(WalletService walletService, WalletMapper walletMapper) {
         this.walletService = walletService;
+        this.walletMapper = walletMapper;
     }
 
-    @GetMapping("/fee")
-    public Map<String, Object> getFee(@RequestParam(defaultValue = "1000") double amount) {
-        double fee = walletService.calculateFee(amount);
-        return Map.of(
-                "amount", amount,
-                "calculatedFee", fee
-        );
+    @PostMapping
+    public ResponseEntity<WalletResponse> create(@Valid @RequestBody CreateWalletRequest request,
+                                                 UriComponentsBuilder uriBuilder) {
+        Wallet wallet = walletService.create(request.userId(), request.currency());
+
+        URI location = uriBuilder
+                .path("/api/v1/wallets/{id}")
+                .buildAndExpand(wallet.getId())
+                .toUri();
+
+        return ResponseEntity.created(location).body(walletMapper.toWalletResponse(wallet));
+    }
+
+    @GetMapping
+    public List<WalletResponse> getAll() {
+        return walletMapper.toWalletResponseList(walletService.getAll());
+    }
+
+    @GetMapping("/{id}")
+    public WalletResponse getById(@PathVariable @Positive Long id) {
+        return walletMapper.toWalletResponse(walletService.getById(id));
+    }
+
+    @PatchMapping("/{id}/status")
+    public WalletResponse updateStatus(@PathVariable @Positive Long id,
+                                       @Valid @RequestBody UpdateStatusRequest request) {
+        Wallet wallet = walletService.updateStatus(id, request.status());
+        return walletMapper.toWalletResponse(wallet);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> close(@PathVariable @Positive Long id) {
+        walletService.close(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/deposits")
+    public WalletResponse deposit(@PathVariable @Positive Long id,
+                                  @Valid @RequestBody AmountRequest request) {
+        Wallet wallet = walletService.deposit(id, request.amount());
+        return walletMapper.toWalletResponse(wallet);
+    }
+
+    @PostMapping("/{id}/withdrawals")
+    public WalletResponse withdraw(@PathVariable @Positive Long id,
+                                   @Valid @RequestBody AmountRequest request) {
+        Wallet wallet = walletService.withdraw(id, request.amount());
+        return walletMapper.toWalletResponse(wallet);
     }
 }
+

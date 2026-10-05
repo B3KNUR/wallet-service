@@ -1,6 +1,6 @@
 package kz.kbtu.walletservice.controller;
 
-import kz.kbtu.walletservice.WalletProperties;
+import kz.kbtu.walletservice.config.WalletProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

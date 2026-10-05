@@ -1,8 +1,11 @@
 package kz.kbtu.walletservice.service;
 
-import kz.kbtu.walletservice.WalletProperties;
+import kz.kbtu.walletservice.config.WalletProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 @ConditionalOnProperty(prefix = "wallet", name = "commission-enabled", havingValue = "true")
@@ -15,7 +18,7 @@ public class StandardCommissionCalculator implements CommissionCalculator {
     }
 
     @Override
-    public double calculate(double amount) {
-        return amount * walletProperties.commissionFee();
+    public BigDecimal calculate(BigDecimal amount) {
+        return amount.multiply(walletProperties.commissionFee()).setScale(2, RoundingMode.HALF_EVEN);
     }
 }

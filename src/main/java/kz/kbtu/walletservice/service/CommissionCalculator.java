@@ -1,5 +1,7 @@
 package kz.kbtu.walletservice.service;
 
+import java.math.BigDecimal;
+
 public interface CommissionCalculator {
-    double calculate(double amount);
+    BigDecimal calculate(BigDecimal amount);
 }
