@@ -1,6 +1,15 @@
 spring:
   profiles:
     active: "@spring.profiles.active@"
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/wallet_db}
+    username: ${DB_USERNAME:wallet}
+    password: ${DB_PASSWORD:wallet}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
   mvc:
     problemdetails:
       enabled: true

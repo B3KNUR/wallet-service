@@ -1,10 +1,12 @@
 package kz.kbtu.walletservice.mapper;
 
 import kz.kbtu.walletservice.dto.response.FeeResponse;
+import kz.kbtu.walletservice.dto.response.PageResponse;
 import kz.kbtu.walletservice.dto.response.TransferResponse;
 import kz.kbtu.walletservice.dto.response.WalletResponse;
 import kz.kbtu.walletservice.model.TransferResult;
 import kz.kbtu.walletservice.model.Wallet;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -42,6 +44,17 @@ public class WalletMapper {
                 transfer.fee(),
                 transfer.amount().add(transfer.fee()),
                 transfer.from().getBalance()
+        );
+    }
+
+    public PageResponse<WalletResponse> toWalletPageResponse(Page<Wallet> page) {
+        List<WalletResponse> content = toWalletResponseList(page.getContent());
+        return new PageResponse<>(
+                content,
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
         );
     }
 

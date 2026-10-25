@@ -1,13 +1,11 @@
 package kz.kbtu.walletservice.repository;
 
 import kz.kbtu.walletservice.model.Wallet;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface WalletRepository {
-    Wallet save(Wallet wallet);
-    Optional<Wallet> findById(Long id);
-    List<Wallet> findAll();
+public interface WalletRepository extends JpaRepository<Wallet, Long> {
+
     List<Wallet> findByUserId(Long id);
 }

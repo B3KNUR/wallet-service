@@ -9,7 +9,10 @@ import kz.kbtu.walletservice.exception.WalletNotFoundException;
 import kz.kbtu.walletservice.model.TransferResult;
 import kz.kbtu.walletservice.model.Wallet;
 import kz.kbtu.walletservice.repository.WalletRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,7 +32,7 @@ public class WalletService {
         this.walletProperties = walletProperties;
     }
 
-
+    @Transactional
     public Wallet create(Long userId, String currency) {
         String normalizedCurrency = currency.toUpperCase();
 
@@ -51,13 +54,15 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
+    @Transactional(readOnly = true)
     public Wallet getById(Long id) {
         return walletRepository.findById(id)
                 .orElseThrow(() -> new WalletNotFoundException(id));
     }
 
-    public List<Wallet> getAll() {
-        return walletRepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<Wallet> getAll(Pageable pageable) {
+        return walletRepository.findAll(pageable);
     }
 
     public Wallet updateStatus(Long id, WalletStatus newStatus) {
@@ -74,6 +79,7 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
+    @Transactional
     public void close(Long id) {
         Wallet wallet = getById(id);
 
@@ -90,7 +96,7 @@ public class WalletService {
         walletRepository.save(wallet);
     }
 
-
+    @Transactional
     public Wallet deposit(Long id, BigDecimal amount) {
         requirePositive(amount);
         Wallet wallet = getActiveWallet(id);
@@ -99,6 +105,7 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
+    @Transactional
     public Wallet withdraw(Long id, BigDecimal amount) {
         requirePositive(amount);
         Wallet wallet = getActiveWallet(id);
@@ -111,6 +118,7 @@ public class WalletService {
         return walletRepository.save(wallet);
     }
 
+    @Transactional
     public TransferResult transfer(Long fromId, Long toId, BigDecimal amount) {
         requirePositive(amount);
         if (fromId.equals(toId)) {
