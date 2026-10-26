@@ -1,11 +1,12 @@
 package kz.kbtu.walletservice.controller;
 
-import kz.kbtu.walletservice.enums.WalletStatus;
-import kz.kbtu.walletservice.exception.InsufficientFundsException;
-import kz.kbtu.walletservice.exception.WalletNotFoundException;
-import kz.kbtu.walletservice.mapper.WalletMapper;
+import kz.kbtu.walletservice.domain.WalletStatus;
+import kz.kbtu.walletservice.domain.exception.InsufficientFundsException;
+import kz.kbtu.walletservice.domain.exception.WalletNotFoundException;
+import kz.kbtu.walletservice.web.mapper.WalletMapper;
 import kz.kbtu.walletservice.domain.Wallet;
-import kz.kbtu.walletservice.service.WalletService;
+import kz.kbtu.walletservice.app.WalletService;
+import kz.kbtu.walletservice.web.controller.WalletController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;

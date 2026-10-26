@@ -8,7 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import kz.kbtu.walletservice.enums.WalletStatus;
+import kz.kbtu.walletservice.domain.WalletStatus;
 
 import java.math.BigDecimal;
 import java.time.Instant;

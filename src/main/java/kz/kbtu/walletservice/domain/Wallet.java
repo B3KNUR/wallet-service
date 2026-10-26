@@ -1,8 +1,7 @@
 package kz.kbtu.walletservice.domain;
 
-import kz.kbtu.walletservice.enums.WalletStatus;
-import kz.kbtu.walletservice.exception.BusinessRuleException;
-import kz.kbtu.walletservice.exception.InsufficientFundsException;
+import kz.kbtu.walletservice.domain.exception.BusinessRuleException;
+import kz.kbtu.walletservice.domain.exception.InsufficientFundsException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
