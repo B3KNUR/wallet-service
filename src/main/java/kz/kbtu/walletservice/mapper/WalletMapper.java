@@ -4,8 +4,8 @@ import kz.kbtu.walletservice.dto.response.FeeResponse;
 import kz.kbtu.walletservice.dto.response.PageResponse;
 import kz.kbtu.walletservice.dto.response.TransferResponse;
 import kz.kbtu.walletservice.dto.response.WalletResponse;
-import kz.kbtu.walletservice.model.TransferResult;
-import kz.kbtu.walletservice.model.Wallet;
+import kz.kbtu.walletservice.domain.TransferResult;
+import kz.kbtu.walletservice.domain.Wallet;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 

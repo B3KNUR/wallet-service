@@ -1,4 +1,4 @@
-package kz.kbtu.walletservice.model;
+package kz.kbtu.walletservice.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "wallets")
-public class Wallet {
+public class WalletEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,45 +37,23 @@ public class Wallet {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
-    protected Wallet() {}
+    protected WalletEntity() {
+    }
 
-    public Wallet(Long userId, String currency) {
+    public WalletEntity(Long id, Long userId, String currency, BigDecimal balance,
+                        WalletStatus status, Instant createdAt) {
+        this.id = id;
         this.userId = userId;
         this.currency = currency;
-        this.balance = BigDecimal.ZERO;
-        this.status = WalletStatus.ACTIVE;
-        this.createdAt = Instant.now();
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getCurrency() {
-        return currency;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
         this.balance = balance;
-    }
-
-    public WalletStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(WalletStatus status) {
         this.status = status;
+        this.createdAt = createdAt;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
+    public Long getId() { return id; }
+    public Long getUserId() { return userId; }
+    public String getCurrency() { return currency; }
+    public BigDecimal getBalance() { return balance; }
+    public WalletStatus getStatus() { return status; }
+    public Instant getCreatedAt() { return createdAt; }
 }

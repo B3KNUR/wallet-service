@@ -8,7 +8,7 @@ import kz.kbtu.walletservice.dto.request.UpdateStatusRequest;
 import kz.kbtu.walletservice.dto.response.PageResponse;
 import kz.kbtu.walletservice.dto.response.WalletResponse;
 import kz.kbtu.walletservice.mapper.WalletMapper;
-import kz.kbtu.walletservice.model.Wallet;
+import kz.kbtu.walletservice.domain.Wallet;
 import kz.kbtu.walletservice.service.WalletService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;

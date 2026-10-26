@@ -1,4 +1,6 @@
-package kz.kbtu.walletservice.model;
+package kz.kbtu.walletservice.domain;
+
+import kz.kbtu.walletservice.domain.Wallet;
 
 import java.math.BigDecimal;
 

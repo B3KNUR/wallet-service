@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import kz.kbtu.walletservice.dto.request.TransferRequest;
 import kz.kbtu.walletservice.dto.response.TransferResponse;
 import kz.kbtu.walletservice.mapper.WalletMapper;
-import kz.kbtu.walletservice.model.TransferResult;
+import kz.kbtu.walletservice.domain.TransferResult;
 import kz.kbtu.walletservice.service.WalletService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

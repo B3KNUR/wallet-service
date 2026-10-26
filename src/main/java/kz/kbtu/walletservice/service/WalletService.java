@@ -6,16 +6,15 @@ import kz.kbtu.walletservice.exception.BusinessRuleException;
 import kz.kbtu.walletservice.exception.InsufficientFundsException;
 import kz.kbtu.walletservice.exception.WalletAlreadyExistsException;
 import kz.kbtu.walletservice.exception.WalletNotFoundException;
-import kz.kbtu.walletservice.model.TransferResult;
-import kz.kbtu.walletservice.model.Wallet;
-import kz.kbtu.walletservice.repository.WalletRepository;
+import kz.kbtu.walletservice.domain.TransferResult;
+import kz.kbtu.walletservice.domain.Wallet;
+import kz.kbtu.walletservice.domain.WalletRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Service
 public class WalletService {
@@ -101,7 +100,7 @@ public class WalletService {
         requirePositive(amount);
         Wallet wallet = getActiveWallet(id);
 
-        wallet.setBalance(wallet.getBalance().add(amount));
+        wallet.deposit(amount);
         return walletRepository.save(wallet);
     }
 
@@ -110,14 +109,9 @@ public class WalletService {
         requirePositive(amount);
         Wallet wallet = getActiveWallet(id);
 
-        if (wallet.getBalance().compareTo(amount) < 0) {
-            throw new InsufficientFundsException(id, wallet.getBalance(), amount);
-        }
-
-        wallet.setBalance(wallet.getBalance().subtract(amount));
+        wallet.withdraw(amount);
         return walletRepository.save(wallet);
     }
-
     @Transactional
     public TransferResult transfer(Long fromId, Long toId, BigDecimal amount) {
         requirePositive(amount);
@@ -142,12 +136,8 @@ public class WalletService {
         BigDecimal fee = commissionCalculator.calculate(amount);
         BigDecimal totalDebit = amount.add(fee);
 
-        if (from.getBalance().compareTo(totalDebit) < 0) {
-            throw new InsufficientFundsException(fromId, from.getBalance(), totalDebit);
-        }
-
-        from.setBalance(from.getBalance().subtract(totalDebit));
-        to.setBalance(to.getBalance().add(amount));
+        from.withdraw(totalDebit);
+        to.deposit(amount);
 
         walletRepository.save(from);
         walletRepository.save(to);
@@ -163,9 +153,7 @@ public class WalletService {
 
     private Wallet getActiveWallet(Long id) {
         Wallet wallet = getById(id);
-        if (wallet.getStatus() != WalletStatus.ACTIVE) {
-            throw new BusinessRuleException("Wallet " + id + " is " + wallet.getStatus());
-        }
+        wallet.ensureActive();
         return wallet;
     }
 
